@@ -1,6 +1,9 @@
 package ticTacToe3;
 import java.util.Random;
 
+//this is just experimental for now
+
+
 public class MoveMaker {
 	//gets a random number between 0-9. can use this for the moving
 	public void getRand(){

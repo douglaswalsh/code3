@@ -11,6 +11,8 @@ public class TicTacToe {
 		TestGrid tGrid = new TestGrid();
 		
 		//while !gameOver make moves
+		// so the garbage below successfully tests for a won game
+		//but i want to clean this up and abstract it better
 		game.printBoard(game.board);
 		game.makeMove(0,0,'x');
 		game.printBoard(game.board);

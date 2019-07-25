@@ -29,6 +29,10 @@ public class GameHandler {
 		}
 		
 		public boolean gameWon(char[][] board){
+			
+			//was experimenting with having my checks for end of game happen here
+			//using the methods in my testgrid class to check the board
+			
 			char[] winRowX =  {'x','x','x'};
 			char[] winRowO =  {'o','o','o'};
 			GameHandler game = new GameHandler();
@@ -37,9 +41,5 @@ public class GameHandler {
 			return true;
 			}
 			return false;
-
-			
 		}
-		
-
 }
