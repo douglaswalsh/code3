@@ -8,7 +8,16 @@ public class GameHandler {
 
 	// puts the mark in the coordinates
 	public void makeMove(int row, int col, char mark) {
-		board[row][col] = mark;
+		if (validateMove(row, col, mark)) {
+			board[row][col] = mark;
+		} else {
+			System.out.println("illegal move");
+		}
+	}
+
+	public boolean validateMove(int row, int col, char mark) {
+		// move must be on the board and must be in a vacant space
+		return !(row > 2 || col > 2 || row < 0 || col < 0 || board[row][col] != '-');
 	}
 
 	// method to print the board broh
@@ -21,11 +30,6 @@ public class GameHandler {
 		}
 	}
 
-	public boolean validateMove(int row, int col) {
-		// move must be on the board and must be in a vacant space
-		return !(row > 2 || col > 2 || row < 0 || col < 0 || board[row][col] != '-');
-	}
-
 	public boolean gameWon(char[][] board) {
 
 		char[] winRowX = { 'x', 'x', 'x' };
@@ -33,19 +37,16 @@ public class GameHandler {
 		// GameHandler game = new GameHandler();
 		TestGrid tGrid = new TestGrid();
 		for (int i = 0; i < 3; i++) {
-			if (Arrays.equals(tGrid.getColumn(board, i), winRowX) 
-					|| Arrays.equals(tGrid.getColumn(board, i), winRowO)
+			if (Arrays.equals(tGrid.getColumn(board, i), winRowX) || Arrays.equals(tGrid.getColumn(board, i), winRowO)
 					|| Arrays.equals(tGrid.getRow(board, i), winRowX)
 					|| Arrays.equals(tGrid.getRow(board, i), winRowO)) {
 				return true;
 			}
 		}
-		if (Arrays.equals(tGrid.getDiagonal1(board), winRowX) 
-			|| Arrays.equals(tGrid.getDiagonal1(board), winRowO)) {
+		if (Arrays.equals(tGrid.getDiagonal1(board), winRowX) || Arrays.equals(tGrid.getDiagonal1(board), winRowO)) {
 			return true;
 		}
-		if (Arrays.equals(tGrid.getDiagonal2(board), winRowX) 
-			|| Arrays.equals(tGrid.getDiagonal2(board), winRowO)) {
+		if (Arrays.equals(tGrid.getDiagonal2(board), winRowX) || Arrays.equals(tGrid.getDiagonal2(board), winRowO)) {
 			return true;
 		}
 		return false;
