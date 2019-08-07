@@ -6,7 +6,7 @@ public class TicTacToe {
 		int round = 0;
 		System.out.println("TICTACTOE");
 
-		while (round < 8 && game.gameWon(game.board) == false) {
+		while (round < 9 && game.gameWon(game.board) == false) {
 			char mark;
 			System.out.println("make your move by entering row coordinate and then column");
 			game.setMove();
@@ -23,9 +23,6 @@ public class TicTacToe {
 			}
 			game.printBoard(game.board);
 		}
-
-		if (game.gameWon(game.board) == true) {
 			System.out.println("game over");
-		}
 	}
 }
