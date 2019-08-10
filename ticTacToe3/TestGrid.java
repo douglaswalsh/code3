@@ -36,13 +36,3 @@ public class TestGrid {
 		return diagonal2;
 	}
 }
-
-/* findBestMove()
-nested for loop over board array
-make move
-who = check who won
-undomove
-if who != '-':
-	return moveArray;
-dont change the board just find if there is a winning move
-possibly move the random stuff to the bottom of the findbestmove loop if it finds no bestmove it will run that*/

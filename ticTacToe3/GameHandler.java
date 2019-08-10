@@ -7,85 +7,66 @@ import java.util.Scanner;
 public class GameHandler {
 	// this my board
 	public char[][] board = { { '-', '-', '-' }, { '-', '-', '-' }, { '-', '-', '-' } };
-	private int[] moveArray = new int[2];
+	private int[] square = new int[2];
 
 	public int[] setAgentMove() {
-		Random rand = new Random();
-		int row = rand.nextInt(3);
-		int col = rand.nextInt(3);
-		this.moveArray[0] = row;
-		this.moveArray[1] = col;
-		return moveArray;
-	}
-
-	public int[] findAgentMove() {
-
-		/*
-		 * returns a moveArray for the agent first loops thru board and makes a
-		 * move checks if this is winning move if iswinning return this
-		 * moveArray this will be the move undo move else get moveArray for a
-		 * edit: need to make it so it only tries free spaces
-		 * 
-		 * now need to make it so that if it can't find a winning move
-		 * it tries to find a blocking move if no blocking move then random
-		 */
-
-		for (int row = 0; row < board[row].length - 1; row++) {
-			for (int col = 0; col < board.length; col++) {
-				if (board[row][col] == '-') {
-					moveArray[0] = row;
-					moveArray[1] = col;
-					makeMove(moveArray, 'x');
-					//System.out.println("looping");
-					if (gameWon(board, 'x')) {
-						makeMove(moveArray, '-');
-						System.out.println("agent getting winning move");
-						return moveArray;
-					} else if (!gameWon(board, 'x')) {
-						//System.out.println("undoing move");
-						makeMove(moveArray, '-');
+		// search for winning move with x and then blocking move with o
+		char[] marks = { 'x', 'o' };
+		for (char mark : marks) {
+			for (int row = 0; row < 3; row++) {
+				for (int col = 0; col < 3; col++) {
+					if (board[row][col] == '-') {
+						square[0] = row;
+						square[1] = col;
+						makeMove(square, mark);
+						if (gameWon(board, mark)) {
+							makeMove(square, '-');
+							if (mark == 'x') {
+								System.out.println("agent getting winning move");
+							} else {
+								System.out.println("agent getting blocking move");
+							}
+							return square;
+						} else if (!gameWon(board, mark)) {
+							// System.out.println("undoing move");
+							makeMove(square, '-');
+						}
 					}
 				}
 			}
 		}
+		// if no winning or blocking, get random move
 		Random rand = new Random();
 		int row = rand.nextInt(3);
 		int col = rand.nextInt(3);
-		moveArray[0] = row;
-		moveArray[1] = col;
+		square[0] = row;
+		square[1] = col;
 		System.out.println("agent making random move: " + row + col);
-		return moveArray;
+		return square;
 	}
 
-	public int[] setMove() {
+	public int[] setPlayerMove() {
 		Scanner input = new Scanner(System.in);
 		int row = input.nextInt();
 		int col = input.nextInt();
-		this.moveArray[0] = row;
-		this.moveArray[1] = col;
+		this.square[0] = row;
+		this.square[1] = col;
 		// input.close();
-		return moveArray;
+		return square;
 	}
 
 	public int[] getMove() {
-		return this.moveArray;
+		return this.square;
 	}
 
-	public void makeMove(int[] moveArray, char mark) {
-		board[moveArray[0]][moveArray[1]] = mark;
+	public void makeMove(int[] square, char mark) {
+		board[square[0]][square[1]] = mark;
 	}
 
-	public boolean validateMove(int[] moveArray) {
+	public boolean validateMove(int[] square) {
 		// move must be on the board and must be in a vacant space
-		return !(moveArray[0] > 2 || moveArray[1] > 2 || moveArray[0] < 0 || moveArray[1] < 0
-				|| board[moveArray[0]][moveArray[1]] != '-');
-	}
-
-	public boolean isSquareWinCritical(char[][] board) {
-		char[] winCriticalX = { '-', 'x', 'x' };
-		TestGrid tGrid = new TestGrid();
-		Arrays.sort(tGrid.getRow(board, 0));
-		return (tGrid.getRow(board, 0) == winCriticalX);
+		return !(square[0] > 2 || square[1] > 2 || square[0] < 0 || square[1] < 0
+				|| board[square[0]][square[1]] != '-');
 	}
 
 	public void printBoard(char board[][]) {
