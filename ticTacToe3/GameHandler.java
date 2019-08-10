@@ -10,19 +10,51 @@ public class GameHandler {
 	private int[] moveArray = new int[2];
 
 	public int[] setAgentMove() {
-		if (isSquareWinCritical(board)) {
-			// set the moveArray to the coordinates of the winning move
-			// separate method to get the coordinates?
-			//what if instead of the critical method returning a boolean instead it returns the move array
-			return moveArray;
-		} else {
-			Random rand = new Random();
-			int row = rand.nextInt(3);
-			int col = rand.nextInt(3);
-			this.moveArray[0] = row;
-			this.moveArray[1] = col;
-			return moveArray;
+		Random rand = new Random();
+		int row = rand.nextInt(3);
+		int col = rand.nextInt(3);
+		this.moveArray[0] = row;
+		this.moveArray[1] = col;
+		return moveArray;
+	}
+
+	public int[] findAgentMove() {
+
+		/*
+		 * returns a moveArray for the agent first loops thru board and makes a
+		 * move checks if this is winning move if iswinning return this
+		 * moveArray this will be the move undo move else get moveArray for a
+		 * edit: need to make it so it only tries free spaces
+		 * 
+		 * now need to make it so that if it can't find a winning move
+		 * it tries to find a blocking move if no blocking move then random
+		 */
+
+		for (int row = 0; row < board[row].length - 1; row++) {
+			for (int col = 0; col < board.length; col++) {
+				if (board[row][col] == '-') {
+					moveArray[0] = row;
+					moveArray[1] = col;
+					makeMove(moveArray, 'x');
+					//System.out.println("looping");
+					if (gameWon(board, 'x')) {
+						makeMove(moveArray, '-');
+						System.out.println("agent getting winning move");
+						return moveArray;
+					} else if (!gameWon(board, 'x')) {
+						//System.out.println("undoing move");
+						makeMove(moveArray, '-');
+					}
+				}
+			}
 		}
+		Random rand = new Random();
+		int row = rand.nextInt(3);
+		int col = rand.nextInt(3);
+		moveArray[0] = row;
+		moveArray[1] = col;
+		System.out.println("agent making random move: " + row + col);
+		return moveArray;
 	}
 
 	public int[] setMove() {
@@ -65,22 +97,29 @@ public class GameHandler {
 		}
 	}
 
-	public char gameWon(char[][] board, char mark) {	
-
-		char[] winRow = {mark, mark, mark};
-
+	public boolean gameWon(char[][] board, char mark) {
+		char[] winRow = { mark, mark, mark };
 		TestGrid tGrid = new TestGrid();
 		for (int i = 0; i < 3; i++) {
-			if (Arrays.equals(tGrid.getColumn(board, i), winRow) 
-					|| Arrays.equals(tGrid.getRow(board, i), winRow)) {
-				return mark;
+			if (Arrays.equals(tGrid.getColumn(board, i), winRow) || Arrays.equals(tGrid.getRow(board, i), winRow)) {
+				return true;
 			}
 		}
-		if (Arrays.equals(tGrid.getDiagonal1(board), winRow))  {
-			return mark;
+		if (Arrays.equals(tGrid.getDiagonal1(board), winRow)) {
+			return true;
 		}
 		if (Arrays.equals(tGrid.getDiagonal2(board), winRow)) {
-			return mark;
+			return true;
+		}
+		return false;
+	}
+
+	public char whoWon(char[][] board) {
+		char[] marks = { 'x', 'o' };
+		for (char mark : marks) {
+			if (gameWon(board, mark)) {
+				return mark;
+			}
 		}
 		return '-';
 	}
